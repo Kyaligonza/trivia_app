@@ -79,12 +79,18 @@ class QuizView extends Component {
 
   submitGuess = (event) => {
     event.preventDefault();
-    const formatGuess = this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase()
+    if(this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g).toLowerCase() != ''){
+    const formatGuess = this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').toLowerCase()
     let evaluate =  this.evaluateAnswer()
     this.setState({
       numCorrect: !evaluate ? this.state.numCorrect : this.state.numCorrect + 1,
       showAnswer: true,
     })
+  }
+    else {
+      alert ('Please submit an answer')
+    }
+  
   }
 
   restartGame = () => {
@@ -130,15 +136,27 @@ class QuizView extends Component {
     )
   }
 
-  evaluateAnswer = () => {
-    const formatGuess = this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase()
-    //const answerArray = this.state.currentQuestion.answer.toLowerCase().split(' ');
-    const answerArray = this.state.currentQuestion.answer.toLowerCase();
-    return answerArray.includes(formatGuess)
+  evaluateAnswer = () =>{
+  const formatGuess = this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase() 
+  const answerArray = this.state.currentQuestion.answer.replace("The ", '').toLowerCase();
+  if (answerArray == formatGuess) {
+  
+  return true }
+  
+  else {
+  
+  return false }
+  
   }
+  
+  // {
+  //   const formatGuess = this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g).toLowerCase()
+  //   const answerArray = this.state.currentQuestion.answer.toLowerCase();
+  //   return answerArray.includes(formatGuess)
+  // } This code works however it will return correct for partial answers like (Mona instead of Mona Lisa). 
 
   renderCorrectAnswer(){
-    const formatGuess = this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase()
+    const formatGuess = this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g).toLowerCase()
     let evaluate =  this.evaluateAnswer()
     return(
       <div className="quiz-play-holder">
@@ -176,8 +194,3 @@ class QuizView extends Component {
 
 export default QuizView;
 
-// // In QuizView.js, the evaluateAnswer() function should be like this, otherwise it keeps telling incorrect answer with more than one words. (just delete split... at the end of answerArray) evaluateAnswer = () => {
-// const formatGuess = this.state.guess.replace(/[.,/#!$%^&*;:{}=-_`~()]/g,"").toLowerCase()
-// const answerArray = this.state.currentQuestion.answer.toLowerCase();
-// return answerArray.includes(formatGuess)
-// } Note to self to review.....
